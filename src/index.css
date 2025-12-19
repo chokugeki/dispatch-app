@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-xxs {
+    font-size: 8pt;
+    line-height: 1.1;
+  }
+}
+
+@media print {
+  /* 全要素を非表示 */
+  body * {
+    visibility: hidden;
+  }
+
+  /* --- 付箋印刷モード --- */
+  body.printing-fusain #printable-fusain-area, 
+  body.printing-fusain #printable-fusain-area * {
+    visibility: visible;
+  }
+  body.printing-fusain #printable-fusain-area {
+    position: absolute; left: 0; top: 0; width: 100%;
+    margin: 0; padding: 20px;
+    display: flex; flex-wrap: wrap; gap: 20px;
+  }
+  body.printing-fusain .fusain-card {
+    border: 1px solid #ccc !important; box-shadow: none !important; break-inside: avoid;
+  }
+
+  /* --- 詳細(A4)印刷モード --- */
+  body.printing-detail #printable-detail-area,
+  body.printing-detail #printable-detail-area * {
+    visibility: visible;
+  }
+  body.printing-detail #printable-detail-area {
+    position: absolute; left: 0; top: 0; width: 100%;
+    margin: 0; padding: 0;
+  }
+  body.printing-detail .break-inside-avoid {
+    break-inside: avoid;
+  }
+
+  /* 印刷除外クラス */
+  .no-print {
+    display: none !important;
+  }
+}
