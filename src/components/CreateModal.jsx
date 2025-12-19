@@ -86,8 +86,18 @@ export default function CreateModal({ onClose, onSaved }) {
     
     const reference_title = generateReferenceTitle(formData);
 
+    // get current user id (Supabase v2 API)
+    let userId = null;
+    try {
+      const { data } = await supabase.auth.getUser();
+      userId = data?.user?.id || null;
+    } catch (e) {
+      // fallback for older API
+      try { userId = supabase.auth.user()?.id || null; } catch (_) { userId = null; }
+    }
+
     const { error } = await supabase.from('requests').insert([
-      { ...formData, reference_title }
+      { ...formData, reference_title, user_id: userId }
     ]);
 
     if(error) alert('保存エラー: ' + error.message);
