@@ -1,0 +1,20 @@
+name = "dispatch-app-proxy"
+main = "./index.js"
+
+# Wrangler v4 では `compatibility_date` が必須です。
+# ここはワークフロー実行日または今日の日付を入れてください。
+compatibility_date = "2025-12-21"
+
+# Cloudflare アカウント設定 (必要に応じて設定)
+# account_id = "<your-account-id>"
+# zone_id = "<your-zone-id>"
+
+# Secrets を設定してください:
+#   wrangler secret put SUPABASE_URL
+#   wrangler secret put SUPABASE_ANON_KEY
+
+[build]
+command = ""
+
+[env]
+# production 用のオーバーライド等が必要ならここに記述します。
