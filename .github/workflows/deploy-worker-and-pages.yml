@@ -42,13 +42,3 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
-
-      # Optional: Deploy Worker if secrets are available
-      - name: Publish Worker (if CF_API_TOKEN provided)
-        if: ${{ secrets.CF_API_TOKEN != '' }}
-        env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: |
-          echo "Publishing Cloudflare Worker..."
-          cd worker || true
-          npx wrangler deploy --api-token "$CF_API_TOKEN" || true
