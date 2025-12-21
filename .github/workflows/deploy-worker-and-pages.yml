@@ -6,47 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-worker:
-    runs-on: ubuntu-latest
-    outputs:
-      worker_url: ${{ steps.set-worker-url.outputs.worker_url }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install wrangler
-        run: npm install -g wrangler@2 || true
-
-      - name: Publish Worker (if CF_API_TOKEN provided)
-        if: ${{ secrets.CF_API_TOKEN != '' }}
-        env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: |
-          echo "Publishing Cloudflare Worker..."
-          cd worker || true
-          # Use wrangler publish; requires CF_API_TOKEN secret to be configured in repo
-          npx wrangler publish --api-token "$CF_API_TOKEN" || true
-
-      - name: Determine worker URL
-        id: set-worker-url
-        run: |
-          # Prefer repository secret VITE_WORKER_URL if set; otherwise leave empty.
-          if [ -n "${{ secrets.VITE_WORKER_URL }}" ]; then
-            echo "worker_url=${{ secrets.VITE_WORKER_URL }}" >> $GITHUB_OUTPUT
-          else
-            echo "worker_url=" >> $GITHUB_OUTPUT
-          fi
-
-  build-and-deploy-pages:
-    needs: deploy-worker
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -68,10 +28,9 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          # If deploy-worker set a worker URL via repo secret, it's passed through via job output
-          VITE_WORKER_URL: ${{ needs.deploy-worker.outputs.worker_url }}
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_WORKER_URL: ${{ secrets.VITE_WORKER_URL }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -83,3 +42,13 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
+
+      # Optional: Deploy Worker if secrets are available
+      - name: Publish Worker (if CF_API_TOKEN provided)
+        if: ${{ secrets.CF_API_TOKEN != '' }}
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          echo "Publishing Cloudflare Worker..."
+          cd worker || true
+          npx wrangler deploy --api-token "$CF_API_TOKEN" || true
