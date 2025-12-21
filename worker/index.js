@@ -7,7 +7,8 @@ addEventListener('fetch', event => {
 // Cloudflare の環境変数バインディング (ALLOWED_ORIGINS_BINDING) を使ってください。
 const DEFAULT_ALLOWED_ORIGINS = [
   'https://chokugeki.github.io',
-  'http://localhost:5173'
+  'http://localhost:5173',
+  'http://localhost:5174'
 ]
 
 // If a binding named ALLOWED_ORIGINS_BINDING is provided (comma-separated), use it.
