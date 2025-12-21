@@ -93,7 +93,23 @@ export default function App() {
               <div className="col-span-1 font-bold text-gray-800 truncate" title={req.client_name}>{maskName(req.client_name)}</div>
               <div className="col-span-1 truncate text-xs text-gray-600">{req.facility}{req.use_days_count ? `(${req.use_days_count}日)` : ''}</div>
               <div className="col-span-1 text-center text-xs">{formatDateShort(req.start_date)}</div>
-              <div className="col-span-1 text-center font-bold text-red-600 text-xs">{formatDateShort(req.deadline)}</div>
+              <div className="col-span-1 text-center">
+                <div className="font-bold text-red-600 text-xs">{formatDateShort(req.deadline)}</div>
+                <div className="flex justify-center gap-2 mt-1">
+                  {(() => {
+                    const hasEmpty = Array.isArray(req.search_results) && req.search_results.some(r => r.progress && r.progress.emptyBottle);
+                    const hasUser = Array.isArray(req.search_results) && req.search_results.some(r => r.progress && r.progress.userConfirm);
+                    const hasBoss = Array.isArray(req.search_results) && req.search_results.some(r => r.progress && r.progress.bossRegister);
+                    return (
+                      <>
+                        <span title="空瓶報告" className={`w-3 h-3 rounded-full ${hasEmpty ? 'bg-green-500' : 'bg-gray-300'}`} />
+                        <span title="利用者確認" className={`w-3 h-3 rounded-full ${hasUser ? 'bg-green-500' : 'bg-gray-300'}`} />
+                        <span title="BOSS登録" className={`w-3 h-3 rounded-full ${hasBoss ? 'bg-green-500' : 'bg-gray-300'}`} />
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
               <div className="col-span-4 text-[10px] text-gray-400 mt-1 truncate pl-1">{req.client_address}</div>
             </div>
           ))}

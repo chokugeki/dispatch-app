@@ -83,10 +83,10 @@ export default function DetailView({ data, onUpdated }) {
          const weekday = (data.desired_weekdays && data.desired_weekdays[index]) ? data.desired_weekdays[index] : `${index+1}日目`;
          const p = res.pickup;
          const pickupLine = `${weekday}迎え${p.car}-${p.bin}-${p.order}→家${p.client_arr}→P着${p.fac_arr}（開始日${startDate}）`;
-         list.push({ type: '迎え', day: weekday, line1, line2: pickupLine });
+         list.push({ type: '迎え', day: weekday, line1, line2: pickupLine, resIndex: index, section: 'pickup' });
          const d = res.dropoff;
          const dropoffLine = `${weekday}送り${d.car}-${d.bin}-${d.order}→P発${d.fac_dep}→家${d.client_arr}（開始日${startDate}）`;
-         list.push({ type: '送り', day: weekday, line1, line2: dropoffLine });
+         list.push({ type: '送り', day: weekday, line1, line2: dropoffLine, resIndex: index, section: 'dropoff' });
      });
      return list;
   };
@@ -187,17 +187,46 @@ export default function DetailView({ data, onUpdated }) {
               </button>
           </h3>
           <div id="printable-fusain-area" className="flex flex-wrap gap-4">
-              {fusainList.map((f, i) => (
+              {fusainList.map((f, i) => {
+                  const res = resultsList[f.resIndex] || {};
+                  const progress = res.progress || {};
+                  return (
                   <div key={i} className="fusain-card border border-gray-300 bg-white shadow-sm p-2 w-[300px] hover:border-blue-400 transition-colors">
                       <div className="text-xxs font-sans leading-tight">
                           <div>{f.line1}</div>
-                          <div>{f.line2}</div>
+                          <div className="mt-2 flex items-center gap-3">
+                              <label className="flex items-center gap-1 text-[11px] text-gray-600">
+                                  <input type="checkbox" checked={!!progress.emptyBottle} onChange={() => {
+                                      const idx = f.resIndex; const newList = [...resultsList];
+                                      newList[idx] = { ...newList[idx], progress: { ...newList[idx].progress, emptyBottle: !newList[idx].progress?.emptyBottle } };
+                                      setResultsList(newList);
+                                  }} />
+                                  <span>空瓶報告</span>
+                              </label>
+                              <label className="flex items-center gap-1 text-[11px] text-gray-600">
+                                  <input type="checkbox" checked={!!progress.userConfirm} onChange={() => {
+                                      const idx = f.resIndex; const newList = [...resultsList];
+                                      newList[idx] = { ...newList[idx], progress: { ...newList[idx].progress, userConfirm: !newList[idx].progress?.userConfirm } };
+                                      setResultsList(newList);
+                                  }} />
+                                  <span>利用者確認</span>
+                              </label>
+                              <label className="flex items-center gap-1 text-[11px] text-gray-600">
+                                  <input type="checkbox" checked={!!progress.bossRegister} onChange={() => {
+                                      const idx = f.resIndex; const newList = [...resultsList];
+                                      newList[idx] = { ...newList[idx], progress: { ...newList[idx].progress, bossRegister: !newList[idx].progress?.bossRegister } };
+                                      setResultsList(newList);
+                                  }} />
+                                  <span>BOSS登録</span>
+                              </label>
+                          </div>
                       </div>
                       <div className="mt-1 border-t pt-1 flex justify-between items-center text-[10px] text-gray-400">
                           <span>{f.day} - {f.type}</span>
                       </div>
                   </div>
-              ))}
+                  );
+              })}
           </div>
       </div>
     </div>
