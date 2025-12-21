@@ -97,9 +97,9 @@ export default function App() {
                 <div className="font-bold text-red-600 text-xs">{formatDateShort(req.deadline)}</div>
                 <div className="flex justify-center gap-2 mt-1">
                   {(() => {
-                    const hasEmpty = Array.isArray(req.search_results) && req.search_results.some(r => r.progress && r.progress.emptyBottle);
-                    const hasUser = Array.isArray(req.search_results) && req.search_results.some(r => r.progress && r.progress.userConfirm);
-                    const hasBoss = Array.isArray(req.search_results) && req.search_results.some(r => r.progress && r.progress.bossRegister);
+                    const hasEmpty = !!(req.progress_status && req.progress_status.empty_flight_date);
+                    const hasUser = !!(req.progress_status && req.progress_status.user_check_date);
+                    const hasBoss = !!(req.progress_status && req.progress_status.boss_date);
                     return (
                       <>
                         <span title="空瓶報告" className={`w-3 h-3 rounded-full ${hasEmpty ? 'bg-green-500' : 'bg-gray-300'}`} />

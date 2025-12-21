@@ -193,34 +193,35 @@ export default function DetailView({ data, onUpdated }) {
                   return (
                   <div key={i} className="fusain-card border border-gray-300 bg-white shadow-sm p-2 w-[300px] hover:border-blue-400 transition-colors">
                       <div className="text-xxs font-sans leading-tight">
-                          <div>{f.line1}</div>
-                          <div className="mt-2 flex items-center gap-3">
-                              <label className="flex items-center gap-1 text-[11px] text-gray-600">
-                                  <input type="checkbox" checked={!!progress.emptyBottle} onChange={() => {
-                                      const idx = f.resIndex; const newList = [...resultsList];
-                                      newList[idx] = { ...newList[idx], progress: { ...newList[idx].progress, emptyBottle: !newList[idx].progress?.emptyBottle } };
-                                      setResultsList(newList);
-                                  }} />
-                                  <span>空瓶報告</span>
-                              </label>
-                              <label className="flex items-center gap-1 text-[11px] text-gray-600">
-                                  <input type="checkbox" checked={!!progress.userConfirm} onChange={() => {
-                                      const idx = f.resIndex; const newList = [...resultsList];
-                                      newList[idx] = { ...newList[idx], progress: { ...newList[idx].progress, userConfirm: !newList[idx].progress?.userConfirm } };
-                                      setResultsList(newList);
-                                  }} />
-                                  <span>利用者確認</span>
-                              </label>
-                              <label className="flex items-center gap-1 text-[11px] text-gray-600">
-                                  <input type="checkbox" checked={!!progress.bossRegister} onChange={() => {
-                                      const idx = f.resIndex; const newList = [...resultsList];
-                                      newList[idx] = { ...newList[idx], progress: { ...newList[idx].progress, bossRegister: !newList[idx].progress?.bossRegister } };
-                                      setResultsList(newList);
-                                  }} />
-                                  <span>BOSS登録</span>
-                              </label>
+                              <div>{f.line1}</div>
+                              <div>{f.line2}</div>
+                              <div className="mt-2 flex items-center gap-3 no-print">
+                                  <label className="flex items-center gap-1 text-[11px] text-gray-600">
+                                      <input type="checkbox" checked={!!progress.emptyBottle} onChange={() => {
+                                          const idx = f.resIndex; const newList = [...resultsList];
+                                          newList[idx] = { ...newList[idx], progress: { ...newList[idx].progress, emptyBottle: !newList[idx].progress?.emptyBottle } };
+                                          setResultsList(newList);
+                                      }} />
+                                      <span>空瓶報告</span>
+                                  </label>
+                                  <label className="flex items-center gap-1 text-[11px] text-gray-600">
+                                      <input type="checkbox" checked={!!progress.userConfirm} onChange={() => {
+                                          const idx = f.resIndex; const newList = [...resultsList];
+                                          newList[idx] = { ...newList[idx], progress: { ...newList[idx].progress, userConfirm: !newList[idx].progress?.userConfirm } };
+                                          setResultsList(newList);
+                                      }} />
+                                      <span>利用者確認</span>
+                                  </label>
+                                  <label className="flex items-center gap-1 text-[11px] text-gray-600">
+                                      <input type="checkbox" checked={!!progress.bossRegister} onChange={() => {
+                                          const idx = f.resIndex; const newList = [...resultsList];
+                                          newList[idx] = { ...newList[idx], progress: { ...newList[idx].progress, bossRegister: !newList[idx].progress?.bossRegister } };
+                                          setResultsList(newList);
+                                      }} />
+                                      <span>BOSS登録</span>
+                                  </label>
+                              </div>
                           </div>
-                      </div>
                       <div className="mt-1 border-t pt-1 flex justify-between items-center text-[10px] text-gray-400">
                           <span>{f.day} - {f.type}</span>
                       </div>
