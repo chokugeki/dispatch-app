@@ -13,6 +13,8 @@
   /* 全要素を非表示 */
   body * {
     visibility: hidden;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   /* --- 付箋印刷モード --- */
