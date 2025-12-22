@@ -10,7 +10,7 @@ const SimpleInput = ({ label, val, onChange, ph, type = "text" }) => (
     </div>
 );
 
-export default function DetailView({ data, onUpdated, onDeleted }) {
+export default function DetailView({ data, onUpdated, onDeleted, onEdit }) {
     const [resultsList, setResultsList] = useState([]);
     const [isDeleting, setIsDeleting] = useState(false);
     const [progressData, setProgressData] = useState({
@@ -126,56 +126,60 @@ export default function DetailView({ data, onUpdated, onDeleted }) {
     return (
         <div className="bg-white shadow rounded-lg max-w-5xl mx-auto border border-gray-200 min-h-[600px] flex flex-col">
             {/* 印刷対象外のヘッダー */}
-            <div className="grid grid-cols-7 text-xs text-center border-b font-bold text-gray-700 select-none no-print">
-                {['依頼', '期限', 'サーチャー', '空便報告', '付箋貼付', '利用者確認', 'BOSS登録'].map((label, i) => (
-                    <div key={label} className={`p-2 border-r last:border-r-0 ${i < 3 ? 'bg-yellow-200' : 'bg-orange-200'}`}>{label}</div>
+            <div className="grid grid-cols-7 text-xs text-center border-b font-black text-gray-900 select-none no-print">
+                {['依頼者', '期限', 'ｻｰﾁｬｰ', '空便報告', '付箋貼付', '利用者確認', 'BOSS登録'].map((label, i) => (
+                    <div key={label} className={`p-2 border-r last:border-r-0 ${i < 3 ? 'bg-yellow-300' : 'bg-orange-300'}`}>{label}</div>
                 ))}
             </div>
 
             {/* ★詳細印刷対象エリア (ここから) */}
             <div id="printable-detail-area">
-                <div className="grid grid-cols-7 text-xs border-b bg-gray-50 p-2 gap-1 items-center">
-                    <div className="text-center font-bold text-gray-600">{data.reporter_name}</div>
-                    <div className="text-center font-bold text-red-600">{formatDateShort(data.deadline)}</div>
-                    <div><input className="w-full border rounded p-1 text-center" placeholder="サーチャー" value={progressData.searcher} onChange={(e) => handleProgressChange('searcher', e.target.value)} /></div>
-                    <div><input type="date" className="w-full border rounded p-1" value={progressData.empty_flight_date} onChange={(e) => handleProgressChange('empty_flight_date', e.target.value)} /></div>
-                    <div><input type="date" className="w-full border rounded p-1" value={progressData.tag_date} onChange={(e) => handleProgressChange('tag_date', e.target.value)} /></div>
-                    <div><input type="date" className="w-full border rounded p-1" value={progressData.user_check_date} onChange={(e) => handleProgressChange('user_check_date', e.target.value)} /></div>
-                    <div><input type="date" className="w-full border rounded p-1" value={progressData.boss_date} onChange={(e) => handleProgressChange('boss_date', e.target.value)} /></div>
+                <div className="grid grid-cols-7 text-xs border-b bg-gray-100 p-2 gap-1 items-center">
+                    <div className="text-center font-black text-gray-900">{data.reporter_name}</div>
+                    <div className="text-center font-black text-red-700">{formatDateShort(data.deadline)}</div>
+                    <div><input className="w-full border-gray-400 border rounded p-1 text-center font-bold" placeholder="ｻｰﾁｬｰ" value={progressData.searcher} onChange={(e) => handleProgressChange('searcher', e.target.value)} /></div>
+                    <div><input type="date" className="w-full border-gray-400 border rounded p-1 font-bold" value={progressData.empty_flight_date} onChange={(e) => handleProgressChange('empty_flight_date', e.target.value)} /></div>
+                    <div><input type="date" className="w-full border-gray-400 border rounded p-1 font-bold" value={progressData.tag_date} onChange={(e) => handleProgressChange('tag_date', e.target.value)} /></div>
+                    <div><input type="date" className="w-full border-gray-400 border rounded p-1 font-bold" value={progressData.user_check_date} onChange={(e) => handleProgressChange('user_check_date', e.target.value)} /></div>
+                    <div><input type="date" className="w-full border-gray-400 border rounded p-1 font-bold" value={progressData.boss_date} onChange={(e) => handleProgressChange('boss_date', e.target.value)} /></div>
                 </div>
 
                 <div className="p-6">
                     <div className="mb-6 bg-blue-50 p-4 rounded border border-blue-100">
                         <div className="flex justify-between items-start mb-2">
-                            <h2 className="text-xl font-bold text-gray-800">{data.client_name} <span className="text-sm font-normal">様</span></h2>
-                            <div className="text-gray-500 text-sm">利用日数: {daysCount}日</div>
+                            <h2 className="text-2xl font-black text-gray-900">{data.client_name} <span className="text-sm font-normal">様</span></h2>
+                            <div className="text-gray-700 text-sm font-bold">利用日数: {daysCount}日</div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div><span className="font-bold text-gray-500">施設:</span> {data.facility} {data.facility_ampm} {data.facility_time_type}</div>
-                            <div><span className="font-bold text-gray-500">住所:</span> {data.client_address}</div>
-                            <div><span className="font-bold text-gray-500">電話:</span> {data.phone_number}</div>
-                            <div><span className="font-bold text-gray-500">備考:</span> {data.remarks}</div>
+                        <div className="grid grid-cols-2 gap-4 text-base">
+                            <div><span className="font-black text-gray-600">施設:</span> <span className="font-bold">{data.facility} {data.facility_ampm} {data.facility_time_type}</span></div>
+                            <div><span className="font-black text-gray-600">住所:</span> <span className="font-bold">{data.client_address}</span></div>
+                            <div><span className="font-black text-gray-600">電話:</span> <span className="font-bold">{data.phone_number}</span></div>
+                            <div><span className="font-black text-gray-600">ADL:</span> <span className="font-bold">{data.adl}</span> | <span className="font-black text-gray-600">種類:</span> <span className="font-bold">{data.client_type}</span></div>
+                            <div className="col-span-2"><span className="font-black text-gray-600">備考:</span> <span className="font-bold">{data.remarks}</span></div>
                         </div>
                     </div>
 
                     <div className="border rounded-lg overflow-hidden mb-6 bg-white">
-                        <div className="bg-gray-100 p-2 font-bold text-gray-700 text-sm border-b flex justify-between items-center">
+                        <div className="bg-gray-200 p-2 font-black text-gray-800 text-base border-b flex justify-between items-center">
                             <span>配車サーチ結果 ({resultsList.length}日分)</span>
                             <div className="flex gap-2 no-print">
-                                <button onClick={() => handlePrint('detail')} className="bg-gray-600 text-white px-3 py-1 text-xs rounded shadow hover:bg-gray-700 flex items-center gap-1">
-                                    <FileText size={12} /> A4詳細印刷
+                                <button onClick={() => onEdit(data)} className="bg-blue-600 text-white px-3 py-1 text-sm rounded shadow hover:bg-blue-700 flex items-center gap-1 font-bold">
+                                    編集
                                 </button>
-                                <button onClick={handleSave} className="bg-green-600 text-white px-3 py-1 text-xs rounded shadow hover:bg-green-700 flex items-center gap-1">
-                                    <Save size={12} /> 保存
+                                <button onClick={() => handlePrint('detail')} className="bg-gray-700 text-white px-3 py-1 text-sm rounded shadow hover:bg-gray-800 flex items-center gap-1 font-bold">
+                                    <FileText size={14} /> A4印刷
+                                </button>
+                                <button onClick={handleSave} className="bg-green-700 text-white px-3 py-1 text-sm rounded shadow hover:bg-green-800 flex items-center gap-1 font-bold">
+                                    <Save size={14} /> 保存
                                 </button>
                                 {isDeleting ? (
                                     <div className="flex gap-1 items-center bg-red-50 p-1 rounded border border-red-200">
-                                        <span className="text-[10px] text-red-600 font-bold px-1 whitespace-nowrap">本当に削除？</span>
+                                        <span className="text-xs text-red-600 font-bold px-1 whitespace-nowrap">本当に削除？</span>
                                         <button onClick={handleDelete} className="bg-red-600 text-white px-2 py-0.5 text-xs rounded shadow hover:bg-red-700">はい</button>
                                         <button onClick={() => setIsDeleting(false)} className="bg-gray-400 text-white px-2 py-0.5 text-xs rounded shadow hover:bg-gray-500">いいえ</button>
                                     </div>
                                 ) : (
-                                    <button onClick={() => setIsDeleting(true)} className="bg-red-600 text-white px-3 py-1 text-xs rounded shadow hover:bg-red-700 flex items-center gap-1">
+                                    <button onClick={() => setIsDeleting(true)} className="bg-red-600 text-white px-3 py-1 text-sm rounded shadow hover:bg-red-700 flex items-center gap-1 font-bold">
                                         削除
                                     </button>
                                 )}
@@ -230,11 +234,15 @@ export default function DetailView({ data, onUpdated, onDeleted }) {
                 </h3>
                 <div id="printable-fusain-area" className="flex flex-wrap gap-4">
                     {fusainList.map((f, i) => {
-                        const res = resultsList[f.resIndex] || {};
-                        const progress = res.progress || {};
+                        const getFacilityBg = (facility) => {
+                            if (facility === "わくわく") return "bg-pink-100";
+                            if (facility === "花笑み") return "bg-yellow-100";
+                            if (facility.includes("いきいき")) return "bg-blue-100";
+                            return "bg-white";
+                        };
                         return (
-                            <div key={i} className="fusain-card border border-gray-300 bg-white shadow-sm p-2 w-[300px] hover:border-blue-400 transition-colors">
-                                <div className="text-xxs font-sans leading-tight">
+                            <div key={i} className={`fusain-card border border-gray-400 shadow-sm p-2 w-[300px] hover:border-blue-600 transition-colors ${getFacilityBg(data.facility)}`}>
+                                <div className="text-xxs font-sans leading-tight font-bold text-gray-900">
                                     <div>{f.line1}</div>
                                     <div>{f.line2}</div>
                                 </div>
