@@ -173,13 +173,18 @@ export default function App() {
           </div>
         )}
       </div>
-      {showModal && <CreateModal onClose={() => setShowModal(false)} onSaved={() => { setShowModal(false); fetchRequests(); }} />}
+      {showModal && <CreateModal onClose={() => setShowModal(false)} onSaved={(data) => {
+        setShowModal(false);
+        if (data && data.id) setSelectedId(data.id);
+        fetchRequests();
+      }} />}
       {editingData && (
         <CreateModal
           initialData={editingData}
           onClose={() => setEditingData(null)}
-          onSaved={() => {
+          onSaved={(data) => {
             setEditingData(null);
+            if (data && data.id) setSelectedId(data.id);
             fetchRequests();
           }}
         />

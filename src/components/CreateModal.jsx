@@ -121,13 +121,17 @@ export default function CreateModal({ onClose, onSaved, initialData = null }) {
 
     let res;
     if (initialData) {
-      res = await supabase.from('requests').update(content).eq('id', initialData.id);
+      res = await supabase.from('requests').update(content).eq('id', initialData.id).select();
     } else {
-      res = await supabase.from('requests').insert([content]);
+      res = await supabase.from('requests').insert([content]).select();
     }
 
     if (res.error) alert('保存エラー: ' + res.error.message);
-    else { alert('保存しました！'); onSaved(); }
+    else {
+      alert('保存しました！');
+      const savedData = res.data && res.data[0];
+      onSaved(savedData);
+    }
   };
 
   return (
