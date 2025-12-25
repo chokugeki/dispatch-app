@@ -68,8 +68,8 @@ export default function App() {
             <Layout size={20} /> 依頼一覧
           </h1>
           <div className="flex gap-2">
-            <button onClick={() => setShowModal(true)} className="bg-blue-700 text-white p-2 rounded hover:bg-blue-800 shadow-sm" title="新規作成">
-              <Plus size={20} />
+            <button onClick={() => setShowModal(true)} className="bg-blue-700 text-white px-3 py-2 rounded hover:bg-blue-800 shadow-sm flex items-center gap-1 font-bold text-sm" title="新規作成">
+              新規依頼書
             </button>
             <button onClick={handleLogout} className="bg-gray-500 text-white p-2 rounded hover:bg-gray-600 shadow-sm" title="ログアウト">
               <LogOut size={20} />
@@ -78,7 +78,7 @@ export default function App() {
         </div>
 
         {/* ヘッダー行 */}
-        <div className="grid grid-cols-4 px-2 py-1 bg-gray-300 text-xs font-black text-gray-800 border-b">
+        <div className="grid grid-cols-4 px-2 py-1 bg-gray-300 text-sm font-black text-gray-800 border-b">
           <div className="col-span-1 border-r border-gray-400 flex flex-col justify-center">
             <div className="border-b border-gray-400 pb-0.5">氏名</div>
             <div className="pt-0.5 truncate">住所</div>
@@ -112,15 +112,15 @@ export default function App() {
                   <div key={req.id} onClick={() => setSelectedId(req.id)}
                     className={`px-2 py-2 border-b cursor-pointer hover:opacity-80 transition-opacity grid grid-cols-4 items-center gap-1 ${getFacilityBg(req.facility)} ${selectedId === req.id ? 'ring-2 ring-blue-600 z-10' : ''}`}>
                     <div className="col-span-1 flex flex-col truncate">
-                      <div className="font-black text-gray-900 truncate" title={req.client_name}>{maskName(req.client_name)}</div>
-                      <div className="text-[10px] text-gray-600 truncate">{req.client_address}</div>
+                      <div className="font-black text-gray-900 truncate text-lg" title={req.client_name}>{maskName(req.client_name)}</div>
+                      <div className="text-xs text-gray-600 truncate">{req.client_address}</div>
                     </div>
                     <div className="col-span-1 truncate flex flex-col pl-1">
-                      <div className="text-xs font-bold text-gray-800 truncate">{req.facility}{req.use_days_count ? `(${req.use_days_count})` : ''}</div>
-                      <div className="text-[10px] text-gray-600 truncate">{req.adl} / {req.client_type}</div>
+                      <div className="text-sm font-bold text-gray-800 truncate">{req.facility}{req.use_days_count ? `(${req.use_days_count})` : ''}</div>
+                      <div className="text-xs text-gray-600 truncate">{req.adl} / {req.client_type}</div>
                     </div>
                     <div className="col-span-1 text-center flex flex-col">
-                      <div className="text-xs font-bold text-gray-700">{formatDateShort(req.start_date)}</div>
+                      <div className="text-sm font-bold text-gray-700">{formatDateShort(req.start_date)}</div>
                       <div className="flex justify-center gap-1 mt-0.5">
                         {(() => {
                           const hasEmpty = !!(req.progress_status && req.progress_status.empty_flight_date);
@@ -139,8 +139,8 @@ export default function App() {
                       </div>
                     </div>
                     <div className="col-span-1 text-center flex flex-col">
-                      <div className="font-black text-red-700 text-xs">{formatDateShort(req.deadline)}</div>
-                      <div className="text-[10px] text-blue-600 font-bold mt-0.5">詳細...</div>
+                      <div className="font-black text-red-700 text-sm">{formatDateShort(req.deadline)}</div>
+                      <div className="text-xs text-blue-600 font-bold mt-0.5">詳細...</div>
                     </div>
                   </div>
                 );
