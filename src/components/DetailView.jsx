@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import { calculateDuration, formatDateShort } from '../utils';
-import { Save, Printer, FileText } from 'lucide-react';
+import { Save, Printer, FileText, MapPin } from 'lucide-react';
 
 const SimpleInput = ({ label, val, onChange, ph, type = "text" }) => (
     <div>
@@ -146,15 +146,31 @@ export default function DetailView({ data, onUpdated, onDeleted, onEdit }) {
 
                 <div className="p-6">
                     <div className="mb-6 bg-blue-50 p-4 rounded border border-blue-100">
-                        <div className="flex justify-between items-start mb-2">
-                            <h2 className="text-2xl font-black text-gray-900">{data.client_name} <span className="text-sm font-normal">様</span></h2>
-                            <div className="text-gray-700 text-sm font-bold">利用日数: {daysCount}日</div>
-                        </div>
+                        <h2 className="text-2xl font-black text-gray-900">{data.client_name} <span className="text-sm font-normal">様</span></h2>
                         <div className="grid grid-cols-2 gap-4 text-base">
                             <div><span className="font-black text-gray-600">施設:</span> <span className="font-bold">{data.facility} {data.facility_ampm} {data.facility_time_type}</span></div>
-                            <div><span className="font-black text-gray-600">住所:</span> <span className="font-bold">{data.client_address}</span></div>
+                            <div>
+                                <span className="font-black text-gray-600">住所:</span> <span className="font-bold">{data.client_address}</span>
+                                <div className="mt-1 no-print">
+                                    <a
+                                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.client_address)}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-sm font-bold"
+                                    >
+                                        <MapPin size={14} /> Googleマップで見る
+                                    </a>
+                                </div>
+                            </div>
                             <div><span className="font-black text-gray-600">電話:</span> <span className="font-bold">{data.phone_number}</span></div>
-                            <div><span className="font-black text-gray-600">ADL:</span> <span className="font-bold">{data.adl}</span> | <span className="font-black text-gray-600">種類:</span> <span className="font-bold">{data.client_type}</span></div>
+                            <div className="invisible"></div> {/* レイアウト調整用の空要素 */}
+                            <div className="col-span-2 pt-2 border-t border-blue-100 flex items-center gap-2">
+                                <span className="font-black text-gray-600">利用日数:</span> <span className="font-bold">{daysCount}日</span>
+                                <span className="text-gray-300 mx-2">|</span>
+                                <span className="font-black text-gray-600">ADL:</span> <span className="font-bold">{data.adl}</span>
+                                <span className="text-gray-300 mx-2">|</span>
+                                <span className="font-black text-gray-600">種類:</span> <span className="font-bold">{data.client_type}</span>
+                            </div>
                             <div className="col-span-2"><span className="font-black text-gray-600">備考:</span> <span className="font-bold">{data.remarks}</span></div>
                         </div>
                     </div>
