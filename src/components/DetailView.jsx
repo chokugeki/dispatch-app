@@ -167,6 +167,8 @@ export default function DetailView({ data, onUpdated, onDeleted, onEdit }) {
                             <div className="col-span-2 pt-2 border-t border-blue-100 flex items-center gap-2">
                                 <span className="font-black text-gray-600">利用日数:</span> <span className="font-bold">{daysCount}日</span>
                                 <span className="text-gray-300 mx-2">|</span>
+                                <span className="font-black text-gray-600">開始希望日:</span> <span className="font-bold">{formatDateShort(data.start_date)}</span>
+                                <span className="text-gray-300 mx-2">|</span>
                                 <span className="font-black text-gray-600">ADL:</span> <span className="font-bold">{data.adl}</span>
                                 <span className="text-gray-300 mx-2">|</span>
                                 <span className="font-black text-gray-600">種類:</span> <span className="font-bold">{data.client_type}</span>
